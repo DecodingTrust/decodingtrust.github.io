@@ -32,6 +32,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
 
   <!-- <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
@@ -64,18 +67,7 @@
   <div class="column is-full has-text-centered content">
     <h2 class="title is-3" id="leaderboard">Leaderboard</h2>
 
-    <table id="table1" class="js-sort-table">
-      <tr>
-        <td class="js-sort-number"><strong>Reset</strong></td>
-        <td class="js-sort-number"><strong>Toxicity</strong></td>
-        <td class="js-sort-number"><strong>Stereotype Bias</strong></td>
-        <td class="js-sort-number"><strong>Adversarial Robustness</strong></td>
-        <td class="js-sort-number"><strong>Out-of-Distribution Robustness</strong></td>
-        <td class="js-sort-number"><strong>Robustness to Adversarial Demonstrations</strong></td>
-        <td class="js-sort-number"><strong>Privacy</strong></td>
-        <td class="js-sort-number"><strong>Machine Ethics</strong></td>
-        <td class="js-sort-number"><strong>Fairness</strong></td>
-      </tr>
+    <table id="table1">
 
     </table>
   </div>
@@ -103,7 +95,11 @@
         valB = parseFloat(valB);
       }
 
-      return asc ? valA - valB : valB - valA;
+      if (asc) {
+        return valA > valB ? 1 : -1;
+      } else {
+        return valA < valB ? 1 : -1;
+      }
     });
 
     rows.forEach(row => tbody.appendChild(row));
@@ -116,41 +112,28 @@
       header: true,
       complete: function(results) {
         let data = results.data;
-        let table = document.getElementById('table1');
-
-        // Add headers to the table
-        // let header = table.createTHead();
-        // let headerRow = header.insertRow(0);
-        // Object.keys(data[0]).forEach(key => {
-        //     let th = document.createElement('th');
-        //     th.textContent = key;
-        //     headerRow.appendChild(th);
-        // });
-
-        // Add rows to the table
-        data.forEach((row, index) => {
-          let tr = document.createElement('tr');
-          if (index % 2 === 0) {
-            tr.style.backgroundColor = '#f9f2f8';
-          } else {
-            tr.style.backgroundColor = '#f8fffe';
-          }
-
-          Object.values(row).forEach((cell, cellIndex) => {
-            let td = document.createElement('td');
-            td.textContent = cell;
-            if (cellIndex === 0) { // Check if it's the first column
-              td.style.fontWeight = 'bold';
-              td.style.textAlign = 'left';
-            }
-            tr.appendChild(td);
-          });
-
-          table.appendChild(tr);
+        let table = $('#table1').DataTable({
+          data: data,
+          columns: [
+            { data: 'Model', title: 'Model' },
+            { data: 'Toxicity', title: 'Toxicity' },
+            { data: 'Stereotype Bias', title: 'Stereotype Bias' },
+            { data: 'Adversarial Robustness', title: 'Adversarial Robustness' },
+            { data: 'Out-of-Distribution Robustness', title: 'Out-of-Distribution Robustness' },
+            { data: 'Robustness to Adversarial Demonstrations', title: 'Robustness to Adversarial Demonstrations' },
+            { data: 'Privacy', title: 'Privacy' },
+            { data: 'Machine Ethics', title: 'Machine Ethics' },
+            { data: 'Fairness', title: 'Fairness' },
+            { data: 'Average', title: 'Overall' }
+          ],
+          header: true,
+          stripeClasses: ['odd-row', 'even-row'],
+          order: [[9, 'desc']]
         });
       }
     });
   });
+
 
 </script>
 
@@ -193,6 +176,14 @@
     margin-top: 5px;
     border: 1px solid #ddd;
     font-size: 14px;
+  }
+
+  .odd-row {
+    background-color: #f9f2f8;
+  }
+
+  .even-row {
+    background-color: #f8fffe;
   }
 
   th, td {
