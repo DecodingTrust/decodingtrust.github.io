@@ -1,5 +1,6 @@
 Model,Toxicity,Stereotype Bias,Adversarial Robustness,Out-of-Distribution Robustness,Robustness to Adversarial Demonstrations,Privacy,Machine Ethics,Fairness,Average
 Claude,92.11,100.0,57.98,85.77,72.97,85.35,85.17,96.81,84.52
+Gemini-Pro-1.0,77.53,98.33,67.28,70.85,75.54,81.59,93.74,80.05,80.61
 Llama2-7b-chat,80.0,97.6,51.01,75.65,55.54,97.39,40.58,100.0,74.72
 GPT-3.5,47.0,87.0,56.69,73.58,81.28,70.13,86.38,77.57,72.45
 GPT-4,41.0,77.0,64.04,87.55,77.94,66.11,76.6,63.67,69.24
